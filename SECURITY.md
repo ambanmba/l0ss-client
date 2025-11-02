@@ -81,7 +81,7 @@ We only support the latest version. Please update to the latest version before r
 1. **Use HTTPS**: Always access via HTTPS (GitHub Pages provides this)
 2. **Update Regularly**: Clear cache to get latest security updates
 3. **Sensitive Data**: Even though files don't leave your device, be cautious with sensitive data
-4. **Verify Source**: Only use official deployment at `ambanmba.github.io/l0ss-client`
+4. **Verify Source**: Only use official deployment at `client.l0ss.com`
 
 ### For Contributors
 1. **No External APIs**: Don't add code that makes network requests

@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-**[✨ Try it now →](https://ambanmba.github.io/l0ss-client)**
+**[✨ Try it now →](https://client.l0ss.com)**
 
 ## ✨ Features
 
@@ -34,7 +34,7 @@
 
 ### Option 1: Use Online (No Installation)
 
-Visit **[https://ambanmba.github.io/l0ss-client](https://ambanmba.github.io/l0ss-client)** in any modern browser.
+Visit **[https://client.l0ss.com](https://client.l0ss.com)** in any modern browser.
 
 ### Option 2: Install as Desktop/Mobile App
 
