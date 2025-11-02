@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary Meta Tags -->
+  <title>L0ss Client - Open Source Lossy Compression Tools</title>
+  <meta name="title" content="L0ss Client - Open Source Lossy Compression Tools">
+  <meta name="description" content="100% client-side lossy compression for JSON, CSV, JavaScript, HTML, CSS, SQL, XML, YAML, SVG, and more. Privacy-first, offline-capable Progressive Web App.">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="L0ss Client - Open Source Lossy Compression Tools">
+  <meta property="og:description" content="100% client-side lossy compression. Privacy-first, offline-capable.">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ff4444">
+  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-l">L</span><span class="logo-zero">0</span><span class="logo-ss">ss</span>
+        <span class="logo-subtitle">Client</span>
+      </div>
+      <div class="header-links">
+        <a href="https://github.com/ambanmba/l0ss-client" target="_blank" rel="noopener">GitHub</a>
+        <a href="#" id="installBtn" class="install-button" style="display:none;">Install App</a>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+      <!-- Upload Section -->
+      <section class="upload-section">
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📁</div>
+          <h2>Drop files here or click to browse</h2>
+          <p>Supports: JSON, CSV, JavaScript, HTML, CSS, SQL, XML, YAML, SVG, Markdown, Text</p>
+          <input type="file" id="fileInput" multiple accept=".json,.csv,.js,.html,.css,.sql,.xml,.yaml,.yml,.svg,.md,.txt" style="display: none;">
+          <button class="btn btn-primary" id="browseBtn">Browse Files</button>
+        </div>
+      </section>
+
+      <!-- File List Section -->
+      <section class="files-section" id="filesSection" style="display: none;">
+        <h2>Selected Files (<span id="fileCount">0</span>)</h2>
+        <div id="filesList"></div>
+      </section>
+
+      <!-- Compression Settings -->
+      <section class="settings-section" id="settingsSection" style="display: none;">
+        <h2>Compression Settings</h2>
+        <div class="settings-grid">
+          <div class="setting-group">
+            <label>Compression Level</label>
+            <div class="level-buttons">
+              <button class="level-btn" data-level="minimal">
+                <strong>Minimal</strong>
+                <span>10-30% reduction</span>
+              </button>
+              <button class="level-btn active" data-level="moderate">
+                <strong>Moderate</strong>
+                <span>30-60% reduction</span>
+                <small>Recommended</small>
+              </button>
+              <button class="level-btn" data-level="aggressive">
+                <strong>Aggressive</strong>
+                <span>60-90% reduction</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-success btn-large" id="compressBtn">
+          🗜️ Compress Files
+        </button>
+      </section>
+
+      <!-- Results Section -->
+      <section class="results-section" id="resultsSection" style="display: none;">
+        <h2>Compression Results</h2>
+        <div id="resultsList"></div>
+        <div class="results-actions">
+          <button class="btn btn-primary" id="downloadAllBtn">📥 Download All</button>
+          <button class="btn btn-secondary" id="resetBtn">🔄 Compress More Files</button>
+        </div>
+      </section>
+
+      <!-- Loading State -->
+      <div class="loading" id="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p id="loadingText">Processing files...</p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>
+        🗜️ <strong>L0ss Client</strong> - 100% Client-Side Compression
+        <br>
+        <small>Privacy-First • Offline-Capable • Open Source</small>
+      </p>
+      <p>
+        <a href="https://github.com/ambanmba/l0ss-client" target="_blank" rel="noopener">View on GitHub</a> •
+        <a href="https://github.com/ambanmba/l0ss-client/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a> •
+        <a href="https://l0ss.com" target="_blank" rel="noopener">Web Version</a>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="../src/app.js"></script>
+</body>
+</html>

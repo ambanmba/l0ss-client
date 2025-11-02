@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <style>
+      .logo-text { font-family: 'Courier New', monospace; font-weight: 900; font-size: 60px; }
+      .logo-l, .logo-ss { fill: #ffffff; }
+      .logo-zero { fill: #ff8844; }
+    </style>
+  </defs>
+  <rect width="100" height="100" fill="#0a0a0a"/>
+  <text x="50" y="70" text-anchor="middle" class="logo-text">
+    <tspan class="logo-l">L</tspan><tspan class="logo-zero">0</tspan><tspan class="logo-ss">ss</tspan>
+  </text>
+</svg>
