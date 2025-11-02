@@ -135,6 +135,98 @@ section h2 {
   color: #ffaa00;
 }
 
+/* PWA Install Info */
+.pwa-info {
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 0 auto 2rem;
+  max-width: 800px;
+}
+
+.pwa-info-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+}
+
+.pwa-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.pwa-text {
+  flex: 1;
+}
+
+.pwa-text h3 {
+  font-size: 1.1rem;
+  color: var(--success);
+  margin: 0 0 0.5rem 0;
+}
+
+.pwa-text p {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+}
+
+.pwa-instructions {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.pwa-instructions strong {
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.pwa-instructions ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.pwa-instructions li {
+  margin-bottom: 0.5rem;
+}
+
+.pwa-instructions li strong {
+  display: inline;
+  color: var(--success);
+}
+
+.btn-close-pwa {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.btn-close-pwa:hover {
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .pwa-info-content {
+    flex-direction: column;
+  }
+
+  .pwa-icon {
+    font-size: 1.5rem;
+  }
+}
+
 /* Upload Area */
 .upload-area {
   background: var(--bg-secondary);

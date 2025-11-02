@@ -91,10 +91,37 @@ document.querySelectorAll('.comparison-card').forEach(card => {
 
 // PWA Install
 let deferredPrompt;
+const pwaInfo = document.getElementById('pwaInfo');
+const closePwaInfo = document.getElementById('closePwaInfo');
+
+// Show PWA info on first visit or when installable
+function showPwaInfo() {
+  const pwaDismissed = localStorage.getItem('pwa-info-dismissed');
+  if (!pwaDismissed && pwaInfo) {
+    pwaInfo.style.display = 'block';
+  }
+}
+
+// Close PWA info and remember dismissal
+if (closePwaInfo) {
+  closePwaInfo.addEventListener('click', () => {
+    if (pwaInfo) {
+      pwaInfo.style.display = 'none';
+      localStorage.setItem('pwa-info-dismissed', 'true');
+    }
+  });
+}
+
+// Show PWA info on page load
+showPwaInfo();
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   installBtn.style.display = 'block';
+
+  // Show PWA info when app becomes installable
+  showPwaInfo();
 });
 
 installBtn.addEventListener('click', async () => {
@@ -102,6 +129,15 @@ installBtn.addEventListener('click', async () => {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     console.log(`User response: ${outcome}`);
+
+    if (outcome === 'accepted') {
+      // Hide PWA info after successful install
+      if (pwaInfo) {
+        pwaInfo.style.display = 'none';
+        localStorage.setItem('pwa-info-dismissed', 'true');
+      }
+    }
+
     deferredPrompt = null;
     installBtn.style.display = 'none';
   }
