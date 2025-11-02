@@ -167,10 +167,13 @@ async function analyzeFirstFile() {
   currentFileIndex = 0;
   currentFileType = detectFileType(file.name);
 
-  showLoading('Analyzing file...');
+  showLoading('⏳ Analyzing file...', 'Reading file contents');
 
   try {
+    updateProgress(0, '⏳ Analyzing file...', 'Reading file contents');
     currentFileContent = await file.text();
+
+    updateProgress(20, '⏳ Analyzing file...', 'Detecting file type');
 
     // Get available options for this file type
     const options = getOptionsForFileType(currentFileType);
@@ -178,8 +181,12 @@ async function analyzeFirstFile() {
     // Reset custom options
     customOptions = {};
 
+    updateProgress(60, '⏳ Analyzing file...', 'Processing compression preview');
+
     // Analyze file
     previewData = await analyzeFile(currentFileContent, currentFileType, customOptions);
+
+    updateProgress(80, '⏳ Analyzing file...', 'Fetching compression options');
 
     // Display preview
     displayPreview();
@@ -191,6 +198,8 @@ async function analyzeFirstFile() {
       configPanel.style.display = 'none';
     }
 
+    updateProgress(100, '✅ Analysis complete', 'Ready for compression');
+
     showSection(previewSection);
     showSection(settingsSection);
 
@@ -198,7 +207,7 @@ async function analyzeFirstFile() {
     console.error('Error analyzing file:', error);
     alert(`Error analyzing file: ${error.message}`);
   } finally {
-    hideLoading();
+    setTimeout(() => hideLoading(), 500); // Brief delay to show 100%
   }
 }
 
@@ -604,26 +613,31 @@ function renderConfigUI(options) {
 async function refreshPreview() {
   if (!currentFileContent || !currentFileType) return;
 
-  showLoading('Updating preview...');
+  showLoading('⏳ Updating preview...');
+  updateProgress(30, '⏳ Updating preview...', 'Applying custom options');
 
   try {
     previewData = await analyzeFile(currentFileContent, currentFileType, customOptions);
+    updateProgress(90, '⏳ Updating preview...', 'Refreshing display');
     displayPreview();
+    updateProgress(100, '✅ Preview updated', '');
   } catch (error) {
     console.error('Error refreshing preview:', error);
   } finally {
-    hideLoading();
+    setTimeout(() => hideLoading(), 300);
   }
 }
 
 // Compression
 async function compressFiles() {
-  showLoading('Compressing files...');
+  showLoading('🗜️ Compressing files...');
   compressionResults = [];
 
   for (let i = 0; i < selectedFiles.length; i++) {
     const file = selectedFiles[i];
-    loadingText.textContent = `Compressing ${i + 1}/${selectedFiles.length}: ${file.name}`;
+    const progress = Math.floor((i / selectedFiles.length) * 70); // 0-70%
+
+    updateProgress(progress, `🗜️ Compressing ${i + 1}/${selectedFiles.length}`, file.name);
 
     try {
       const content = await file.text();
@@ -666,8 +680,11 @@ async function compressFiles() {
     }
   }
 
-  hideLoading();
-  showResults();
+  updateProgress(100, '✅ Compression complete', `${compressionResults.length} files processed`);
+  setTimeout(() => {
+    hideLoading();
+    showResults();
+  }, 500);
 }
 
 function showResults() {
@@ -690,6 +707,17 @@ function showResults() {
     const reduction = ((result.originalSize - result.compressedSize) / result.originalSize * 100).toFixed(1);
     const reductionClass = reduction > 50 ? 'excellent' : reduction > 30 ? 'good' : 'moderate';
 
+    // Get optimizations list
+    const operations = result.manifest?.operations || [];
+    const optimizationsHTML = operations.length > 0
+      ? `<div class="result-optimizations">
+           <h4>Optimizations Applied:</h4>
+           <ul>
+             ${operations.map(op => `<li>${formatOperationType(op.type, op.count)}</li>`).join('')}
+           </ul>
+         </div>`
+      : '';
+
     return `
       <div class="result-item">
         <div class="result-header">
@@ -699,6 +727,7 @@ function showResults() {
             <span class="reduction ${reductionClass}">${reduction}% smaller</span>
           </div>
         </div>
+        ${optimizationsHTML}
         <div class="result-actions">
           <button class="btn btn-sm" onclick="downloadResult(${index})">📥 Download</button>
           <button class="btn btn-sm btn-secondary" onclick="downloadManifest(${index})">📄 Manifest</button>
@@ -759,13 +788,25 @@ function hideSection(element) {
   element.style.display = 'none';
 }
 
+// Progress bar helper
+function updateProgress(percent, text, subtext = '') {
+  const progressBar = document.getElementById('progressBar');
+  const loadingSubtext = document.getElementById('loadingSubtext');
+
+  if (progressBar) progressBar.style.width = percent + '%';
+  loadingText.textContent = text;
+  if (loadingSubtext) loadingSubtext.textContent = subtext;
+}
+
 function showLoading(text) {
   loadingText.textContent = text;
   loading.style.display = 'flex';
+  updateProgress(0, text);
 }
 
 function hideLoading() {
   loading.style.display = 'none';
+  updateProgress(0, '');
 }
 
 function formatBytes(bytes) {

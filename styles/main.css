@@ -415,6 +415,31 @@ section h2 {
   font-size: 0.9rem;
 }
 
+.result-optimizations {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--bg-primary);
+  border-radius: 6px;
+  border-left: 3px solid var(--success);
+}
+
+.result-optimizations h4 {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.result-optimizations ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.result-optimizations li {
+  margin-bottom: 0.25rem;
+}
+
 .results-actions {
   display: flex;
   gap: 1rem;
@@ -453,9 +478,45 @@ section h2 {
   to { transform: rotate(360deg); }
 }
 
-.loading p {
-  margin-top: 1rem;
+.loading #loadingText {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.progress-bar-container {
+  width: 100%;
+  max-width: 500px;
+  height: 6px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 1rem auto;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+#loadingSubtext {
+  font-size: 0.85rem;
   color: var(--text-secondary);
+  margin-top: 0.5rem;
 }
 
 /* Footer */
