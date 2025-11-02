@@ -117,6 +117,20 @@ document.querySelectorAll('.comparison-card').forEach(card => {
   });
 });
 
+// Level selector button handlers (for multiple files)
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const level = btn.getAttribute('data-level');
+
+    // Update active state
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Set compression level
+    compressionLevel = level;
+  });
+});
+
 // PWA Install
 let deferredPrompt;
 const pwaInfo = document.getElementById('pwaInfo');
@@ -259,6 +273,32 @@ window.removeFile = function(index) {
 // File Analysis & Preview
 async function analyzeFirstFile() {
   if (selectedFiles.length === 0) return;
+
+  const multipleFilesInfo = document.getElementById('multipleFilesInfo');
+  const levelSelector = document.getElementById('levelSelector');
+
+  // If multiple files, skip preview and just show settings
+  if (selectedFiles.length > 1) {
+    hideSection(previewSection);
+    showSection(settingsSection);
+    if (multipleFilesInfo) {
+      multipleFilesInfo.style.display = 'flex';
+    }
+    if (levelSelector) {
+      levelSelector.style.display = 'block';
+    }
+    // Set default level
+    compressionLevel = 'moderate';
+    return;
+  }
+
+  // Single file - show full preview
+  if (multipleFilesInfo) {
+    multipleFilesInfo.style.display = 'none';
+  }
+  if (levelSelector) {
+    levelSelector.style.display = 'none';
+  }
 
   const file = selectedFiles[0];
   currentFileIndex = 0;

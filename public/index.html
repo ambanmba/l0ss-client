@@ -156,6 +156,36 @@
 
       <!-- Compression Settings -->
       <section class="settings-section" id="settingsSection" style="display: none;">
+        <!-- Multiple Files Info -->
+        <div class="multiple-files-info" id="multipleFilesInfo" style="display: none;">
+          <div class="info-icon">💡</div>
+          <div class="info-content">
+            <strong>Multiple files selected</strong>
+            <p>Select a compression level below. All files will be compressed with the same settings.</p>
+          </div>
+        </div>
+
+        <!-- Level Selector for Multiple Files -->
+        <div class="level-selector" id="levelSelector" style="display: none;">
+          <div class="level-buttons">
+            <div class="level-btn" data-level="minimal">
+              <strong>Minimal</strong>
+              <span>Safe optimizations only</span>
+              <small>10-30% reduction</small>
+            </div>
+            <div class="level-btn active" data-level="moderate">
+              <strong>Moderate</strong>
+              <span>Balanced approach</span>
+              <small>30-60% reduction</small>
+            </div>
+            <div class="level-btn" data-level="aggressive">
+              <strong>Aggressive</strong>
+              <span>Maximum compression</span>
+              <small>60-90% reduction</small>
+            </div>
+          </div>
+        </div>
+
         <div class="selected-level-info" id="selectedLevelInfo" style="display: none;">
           <div class="selected-level-badge">
             Selected: <strong id="selectedLevelName">Moderate</strong>
