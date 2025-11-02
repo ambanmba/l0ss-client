@@ -440,63 +440,116 @@ function showDiffForLevel(level) {
   optimizationsSection.appendChild(optimizationsList);
   diffContent.appendChild(optimizationsSection);
 
-  // Create before section
-  const beforeSection = document.createElement('div');
-  beforeSection.className = 'diff-section';
+  // SVG Visual Comparison (if file type is SVG)
+  if (currentFileType === 'SVG') {
+    const visualComparison = document.createElement('div');
+    visualComparison.className = 'svg-visual-comparison';
 
-  const beforeLabel = document.createElement('div');
-  beforeLabel.className = 'diff-label';
-  beforeLabel.textContent = 'Before:';
-  beforeSection.appendChild(beforeLabel);
+    // Before SVG
+    const beforeSection = document.createElement('div');
+    beforeSection.className = 'svg-comparison-item';
 
-  const beforeContent = document.createElement('pre');
-  beforeContent.className = 'diff-before';
+    const beforeLabel = document.createElement('div');
+    beforeLabel.className = 'diff-label';
+    beforeLabel.textContent = 'Before (Original):';
+    beforeSection.appendChild(beforeLabel);
 
-  // Show first 500 characters or 10 lines
-  const originalLines = original.split('\n');
-  const compressedLines = compressed.split('\n');
-  const isMinified = compressedLines.length === 1 && originalLines.length > 1;
+    const beforeContainer = document.createElement('div');
+    beforeContainer.className = 'svg-container svg-before';
+    beforeContainer.innerHTML = original;
+    beforeSection.appendChild(beforeContainer);
 
-  if (isMinified) {
-    beforeContent.textContent = originalLines.slice(0, 10).join('\n');
-    if (originalLines.length > 10) {
-      beforeContent.textContent += '\n... (' + (originalLines.length - 10) + ' more lines)';
-    }
+    const beforeSize = document.createElement('div');
+    beforeSize.className = 'svg-size-label';
+    beforeSize.textContent = formatBytes(new Blob([original]).size);
+    beforeSection.appendChild(beforeSize);
+
+    visualComparison.appendChild(beforeSection);
+
+    // After SVG
+    const afterSection = document.createElement('div');
+    afterSection.className = 'svg-comparison-item';
+
+    const afterLabel = document.createElement('div');
+    afterLabel.className = 'diff-label';
+    afterLabel.textContent = 'After (Compressed):';
+    afterSection.appendChild(afterLabel);
+
+    const afterContainer = document.createElement('div');
+    afterContainer.className = 'svg-container svg-after';
+    afterContainer.innerHTML = compressed;
+    afterSection.appendChild(afterContainer);
+
+    const afterSize = document.createElement('div');
+    afterSize.className = 'svg-size-label';
+    const compressedSize = new Blob([compressed]).size;
+    const reduction = ((new Blob([original]).size - compressedSize) / new Blob([original]).size * 100).toFixed(1);
+    afterSize.textContent = `${formatBytes(compressedSize)} (${reduction}% smaller)`;
+    afterSize.style.color = 'var(--success)';
+    afterSection.appendChild(afterSize);
+
+    visualComparison.appendChild(afterSection);
+    diffContent.appendChild(visualComparison);
   } else {
-    beforeContent.textContent = original.substring(0, 500);
-    if (original.length > 500) {
-      beforeContent.textContent += '\n... (' + (original.length - 500) + ' more characters)';
+    // Text-based diff for non-SVG files
+    // Create before section
+    const beforeSection = document.createElement('div');
+    beforeSection.className = 'diff-section';
+
+    const beforeLabel = document.createElement('div');
+    beforeLabel.className = 'diff-label';
+    beforeLabel.textContent = 'Before:';
+    beforeSection.appendChild(beforeLabel);
+
+    const beforeContent = document.createElement('pre');
+    beforeContent.className = 'diff-before';
+
+    // Show first 500 characters or 10 lines
+    const originalLines = original.split('\n');
+    const compressedLines = compressed.split('\n');
+    const isMinified = compressedLines.length === 1 && originalLines.length > 1;
+
+    if (isMinified) {
+      beforeContent.textContent = originalLines.slice(0, 10).join('\n');
+      if (originalLines.length > 10) {
+        beforeContent.textContent += '\n... (' + (originalLines.length - 10) + ' more lines)';
+      }
+    } else {
+      beforeContent.textContent = original.substring(0, 500);
+      if (original.length > 500) {
+        beforeContent.textContent += '\n... (' + (original.length - 500) + ' more characters)';
+      }
     }
+    beforeSection.appendChild(beforeContent);
+
+    // Create after section
+    const afterSection = document.createElement('div');
+    afterSection.className = 'diff-section';
+
+    const afterLabel = document.createElement('div');
+    afterLabel.className = 'diff-label';
+    afterLabel.textContent = 'After:';
+    afterSection.appendChild(afterLabel);
+
+    const afterContent = document.createElement('pre');
+    afterContent.className = 'diff-after';
+
+    if (isMinified) {
+      afterContent.textContent = compressed.substring(0, 500);
+      if (compressed.length > 500) {
+        afterContent.textContent += '\n... (' + (compressed.length - 500) + ' more characters)';
+      }
+    } else {
+      afterContent.textContent = compressedLines.slice(0, 10).join('\n');
+      if (compressedLines.length > 10) {
+        afterContent.textContent += '\n... (' + (compressedLines.length - 10) + ' more lines)';
+      }
+    }
+    afterSection.appendChild(afterContent);
+
+    diffContent.appendChild(beforeSection);
+    diffContent.appendChild(afterSection);
   }
-  beforeSection.appendChild(beforeContent);
-
-  // Create after section
-  const afterSection = document.createElement('div');
-  afterSection.className = 'diff-section';
-
-  const afterLabel = document.createElement('div');
-  afterLabel.className = 'diff-label';
-  afterLabel.textContent = 'After:';
-  afterSection.appendChild(afterLabel);
-
-  const afterContent = document.createElement('pre');
-  afterContent.className = 'diff-after';
-
-  if (isMinified) {
-    afterContent.textContent = compressed.substring(0, 500);
-    if (compressed.length > 500) {
-      afterContent.textContent += '\n... (' + (compressed.length - 500) + ' more characters)';
-    }
-  } else {
-    afterContent.textContent = compressedLines.slice(0, 10).join('\n');
-    if (compressedLines.length > 10) {
-      afterContent.textContent += '\n... (' + (compressedLines.length - 10) + ' more lines)';
-    }
-  }
-  afterSection.appendChild(afterContent);
-
-  diffContent.appendChild(beforeSection);
-  diffContent.appendChild(afterSection);
 
   document.getElementById('diffPreview').style.display = 'block';
 }

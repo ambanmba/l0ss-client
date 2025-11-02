@@ -948,3 +948,61 @@ section h2 {
     grid-template-columns: 1fr;
   }
 }
+
+/* SVG Visual Comparison */
+.svg-visual-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.svg-comparison-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.svg-container {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.svg-container svg {
+  max-width: 100%;
+  max-height: 350px;
+  height: auto;
+}
+
+.svg-before {
+  border-left: 3px solid rgba(255, 68, 68, 0.5);
+}
+
+.svg-after {
+  border-left: 3px solid rgba(0, 255, 136, 0.5);
+}
+
+.svg-size-label {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  margin-top: 0.5rem;
+}
+
+/* Mobile: stack SVG comparison */
+@media (max-width: 768px) {
+  .svg-visual-comparison {
+    grid-template-columns: 1fr;
+  }
+}
