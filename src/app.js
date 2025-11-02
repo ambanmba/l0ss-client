@@ -195,9 +195,9 @@ async function loadSampleFile(filename) {
     showLoading('📥 Loading sample file...');
     updateProgress(30, '📥 Loading sample file...', filename);
 
-    const response = await fetch(`/samples/${filename}`);
+    const response = await fetch(`./samples/${filename}`);
     if (!response.ok) {
-      throw new Error(`Failed to load sample file: ${response.statusText}`);
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
     const content = await response.text();
