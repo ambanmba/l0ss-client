@@ -97,6 +97,13 @@
           <div id="diffContent"></div>
         </div>
 
+        <!-- Compress from Preview Button -->
+        <div style="margin-top: 1.5rem; text-align: center; display: none;" id="compressFromPreviewContainer">
+          <button class="btn btn-success btn-large" id="compressFromPreview">
+            Compress with <span id="compressLevelName">Moderate</span>
+          </button>
+        </div>
+
         <!-- Configuration Panel -->
         <div class="config-panel" id="configPanel" style="display: none;">
           <div class="config-header">
@@ -125,7 +132,33 @@
       <!-- Results Section -->
       <section class="results-section" id="resultsSection" style="display: none;">
         <h2>Compression Results</h2>
+
+        <!-- Stat Cards -->
+        <div class="stat-grid" id="statGrid" style="display: none;">
+          <div class="stat-card">
+            <div class="stat-value" id="originalSize">-</div>
+            <div class="stat-label">Original Size</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="compressedSize">-</div>
+            <div class="stat-label">Compressed Size</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="reduction">-</div>
+            <div class="stat-label">Reduction</div>
+          </div>
+        </div>
+
         <div id="resultsList"></div>
+
+        <!-- Manifest Info -->
+        <div id="manifestInfo" style="display: none; margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 4px; border-left: 3px solid var(--accent);">
+          <div style="font-size: 0.9rem; color: var(--text-secondary);">
+            <strong style="color: var(--text-primary);">Recovery Manifest:</strong> This JSON file contains all operations performed and can help you understand what was changed.
+            <span id="reversibilityInfo" style="color: var(--success);"></span>
+          </div>
+        </div>
+
         <div class="results-actions">
           <button class="btn btn-primary" id="downloadAllBtn">📥 Download All</button>
           <button class="btn btn-secondary" id="resetBtn">🔄 Compress More Files</button>

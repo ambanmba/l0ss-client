@@ -72,6 +72,12 @@ compressBtn.addEventListener('click', compressFiles);
 downloadAllBtn.addEventListener('click', downloadAllFiles);
 resetBtn.addEventListener('click', reset);
 
+// Compress from preview button
+const compressFromPreviewBtn = document.getElementById('compressFromPreview');
+if (compressFromPreviewBtn) {
+  compressFromPreviewBtn.addEventListener('click', compressFiles);
+}
+
 // Comparison card click handlers
 document.querySelectorAll('.comparison-card').forEach(card => {
   card.addEventListener('click', () => {
@@ -284,6 +290,16 @@ function selectLevel(level) {
   const levelNames = { minimal: 'Minimal', moderate: 'Moderate', aggressive: 'Aggressive' };
   selectedLevelName.textContent = levelNames[level];
   selectedLevelInfo.style.display = 'block';
+
+  // Update compress from preview button
+  const compressLevelName = document.getElementById('compressLevelName');
+  const compressFromPreviewContainer = document.getElementById('compressFromPreviewContainer');
+  if (compressLevelName) {
+    compressLevelName.textContent = levelNames[level];
+  }
+  if (compressFromPreviewContainer) {
+    compressFromPreviewContainer.style.display = 'block';
+  }
 
   // Show diff for this level
   showDiffForLevel(level);
@@ -691,6 +707,50 @@ function showResults() {
   hideSection(previewSection);
   hideSection(settingsSection);
   showSection(resultsSection);
+
+  // Calculate aggregate stats
+  const successfulResults = compressionResults.filter(r => !r.error);
+  const totalOriginalSize = successfulResults.reduce((sum, r) => sum + r.originalSize, 0);
+  const totalCompressedSize = successfulResults.reduce((sum, r) => sum + r.compressedSize, 0);
+  const avgReduction = successfulResults.length > 0
+    ? ((totalOriginalSize - totalCompressedSize) / totalOriginalSize * 100).toFixed(1)
+    : 0;
+
+  // Populate stat cards
+  const statGrid = document.getElementById('statGrid');
+  const originalSizeEl = document.getElementById('originalSize');
+  const compressedSizeEl = document.getElementById('compressedSize');
+  const reductionEl = document.getElementById('reduction');
+
+  if (successfulResults.length > 0) {
+    originalSizeEl.textContent = formatBytes(totalOriginalSize);
+    compressedSizeEl.textContent = formatBytes(totalCompressedSize);
+    reductionEl.textContent = `${avgReduction}%`;
+    statGrid.style.display = 'grid';
+  } else {
+    statGrid.style.display = 'none';
+  }
+
+  // Show manifest info with reversibility
+  const manifestInfo = document.getElementById('manifestInfo');
+  const reversibilityInfo = document.getElementById('reversibilityInfo');
+
+  if (successfulResults.length > 0) {
+    const hasReversibleOps = successfulResults.some(r =>
+      r.manifest?.operations?.some(op => op.reversible === true)
+    );
+
+    if (hasReversibleOps) {
+      reversibilityInfo.textContent = ' Some operations are reversible using the manifest data.';
+    } else {
+      reversibilityInfo.textContent = ' Operations are not reversible.';
+      reversibilityInfo.style.color = 'var(--text-secondary)';
+    }
+
+    manifestInfo.style.display = 'block';
+  } else {
+    manifestInfo.style.display = 'none';
+  }
 
   resultsList.innerHTML = compressionResults.map((result, index) => {
     if (result.error) {
