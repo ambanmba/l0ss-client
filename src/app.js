@@ -10,7 +10,7 @@ import { compressHTML, compressCSS } from './compression/html-css.js';
 import { compressSQL } from './compression/sql.js';
 import { compressSVG } from './compression/svg.js';
 import { compressXML, compressYAML } from './compression/xml-yaml.js';
-import { compressText, compressMarkdown } from './compression/text.js';
+import { compressText } from './compression/text.js';
 import { detectFileType } from './utils/file-type-detector.js';
 import { downloadFile, downloadZip } from './utils/file-handler.js';
 
@@ -48,7 +48,7 @@ const compressionEngines = {
   XML: compressXML,
   YAML: compressYAML,
   Text: compressText,
-  Markdown: compressMarkdown
+  Markdown: compressText
 };
 
 // Event Listeners
