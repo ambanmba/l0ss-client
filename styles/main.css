@@ -259,6 +259,73 @@ section h2 {
   margin-bottom: 1.5rem;
 }
 
+.upload-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.sample-files-dropdown {
+  position: relative;
+}
+
+.sample-files-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  min-width: 280px;
+  box-shadow: 0 4px 12px var(--shadow);
+  z-index: 100;
+}
+
+.sample-file-item {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sample-file-item:last-child {
+  border-bottom: none;
+}
+
+.sample-file-item:hover {
+  background: var(--bg-tertiary);
+}
+
+@media (max-width: 768px) {
+  .upload-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .upload-buttons .btn {
+    width: 100%;
+  }
+
+  .sample-files-dropdown {
+    width: 100%;
+  }
+
+  .sample-files-menu {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+}
+
 /* Buttons */
 .btn {
   padding: 0.75rem 1.5rem;

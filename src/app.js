@@ -78,6 +78,34 @@ if (compressFromPreviewBtn) {
   compressFromPreviewBtn.addEventListener('click', compressFiles);
 }
 
+// Sample files dropdown
+const sampleFilesBtn = document.getElementById('sampleFilesBtn');
+const sampleFilesMenu = document.getElementById('sampleFilesMenu');
+
+if (sampleFilesBtn && sampleFilesMenu) {
+  // Toggle dropdown
+  sampleFilesBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isVisible = sampleFilesMenu.style.display === 'block';
+    sampleFilesMenu.style.display = isVisible ? 'none' : 'block';
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', () => {
+    sampleFilesMenu.style.display = 'none';
+  });
+
+  // Load sample file when clicked
+  document.querySelectorAll('.sample-file-item').forEach(item => {
+    item.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const filename = item.getAttribute('data-file');
+      await loadSampleFile(filename);
+      sampleFilesMenu.style.display = 'none';
+    });
+  });
+}
+
 // Comparison card click handlers
 document.querySelectorAll('.comparison-card').forEach(card => {
   card.addEventListener('click', () => {
@@ -159,6 +187,33 @@ function handleDrop(e) {
   uploadArea.classList.remove('drag-over');
   const files = Array.from(e.dataTransfer.files);
   addFiles(files);
+}
+
+// Load sample file
+async function loadSampleFile(filename) {
+  try {
+    showLoading('📥 Loading sample file...');
+    updateProgress(30, '📥 Loading sample file...', filename);
+
+    const response = await fetch(`/samples/${filename}`);
+    if (!response.ok) {
+      throw new Error(`Failed to load sample file: ${response.statusText}`);
+    }
+
+    const content = await response.text();
+    const blob = new Blob([content], { type: 'text/plain' });
+    const file = new File([blob], filename, { type: 'text/plain' });
+
+    updateProgress(100, '✅ Sample file loaded', '');
+    setTimeout(() => {
+      hideLoading();
+      addFiles([file]);
+    }, 300);
+  } catch (error) {
+    console.error('Error loading sample file:', error);
+    alert(`Error loading sample file: ${error.message}`);
+    hideLoading();
+  }
 }
 
 async function addFiles(files) {

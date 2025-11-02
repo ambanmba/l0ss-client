@@ -1,0 +1,14 @@
+order_id,customer_name,customer_email,product_name,product_category,quantity,unit_price,total_amount,order_date,shipping_address,shipping_city,shipping_state,shipping_zip,payment_method,order_status,tracking_number,notes
+1001,John Smith,john.smith@example.com,Wireless Mouse,Electronics,2,29.99,59.98,2025-10-15,123 Main Street,Springfield,IL,62701,Credit Card,Shipped,1Z999AA10123456784,Customer requested expedited shipping
+1002,Jane Johnson,jane.johnson@example.com,USB Cable,Electronics,5,9.99,49.95,2025-10-16,456 Oak Avenue,Springfield,IL,62702,PayPal,Delivered,1Z999AA10123456785,Gift wrapping requested
+1003,Michael Williams,michael.williams@example.com,Keyboard,Electronics,1,79.99,79.99,2025-10-17,789 Pine Road,Springfield,IL,62703,Credit Card,Processing,1Z999AA10123456786,No special requests
+1004,Sarah Martinez,sarah.martinez@example.com,Monitor Stand,Furniture,1,49.99,49.99,2025-10-18,321 Elm Boulevard,Springfield,IL,62704,Debit Card,Shipped,1Z999AA10123456787,Delivery instructions: Leave at back door
+1005,David Anderson,david.anderson@example.com,Desk Lamp,Furniture,2,34.99,69.98,2025-10-19,654 Maple Drive,Springfield,IL,62705,Credit Card,Delivered,1Z999AA10123456788,Customer called to confirm delivery time
+1006,Emily Brown,emily.brown@example.com,Notebook Set,Office Supplies,10,12.99,129.90,2025-10-20,987 Cedar Lane,Springfield,IL,62706,PayPal,Shipped,1Z999AA10123456789,Bulk order for office use
+1007,Robert Taylor,robert.taylor@example.com,Pen Set,Office Supplies,3,8.99,26.97,2025-10-21,246 Birch Street,Springfield,IL,62707,Credit Card,Processing,1Z999AA10123456790,No special requests
+1008,Lisa Garcia,lisa.garcia@example.com,Wireless Mouse,Electronics,1,29.99,29.99,2025-10-22,135 Walnut Court,Springfield,IL,62708,Debit Card,Delivered,1Z999AA10123456791,Customer very satisfied with product
+1009,James Wilson,james.wilson@example.com,USB Cable,Electronics,8,9.99,79.92,2025-10-23,864 Spruce Avenue,Springfield,IL,62709,Credit Card,Shipped,1Z999AA10123456792,Rush delivery requested and confirmed
+1010,Jennifer Moore,jennifer.moore@example.com,Keyboard,Electronics,1,79.99,79.99,2025-10-24,753 Ash Road,Springfield,IL,62710,PayPal,Processing,1Z999AA10123456793,No special requests
+1011,William Lee,william.lee@example.com,Monitor Stand,Furniture,2,49.99,99.98,2025-10-25,951 Poplar Drive,Springfield,IL,62711,Credit Card,Shipped,1Z999AA10123456794,Customer requested specific delivery date
+1012,Mary Thompson,mary.thompson@example.com,Desk Lamp,Furniture,1,34.99,34.99,2025-10-26,159 Hickory Lane,Springfield,IL,62712,Debit Card,Delivered,1Z999AA10123456795,Delivered successfully without issues
+1013,Christopher White,christopher.white@example.com,Notebook Set,Office Supplies,5,12.99,64.95,2025-10-27,357 Sycamore Street,Springfield,IL,62713,Credit Card,Processing,1Z999AA10123456796,No special requests

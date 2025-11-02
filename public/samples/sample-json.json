@@ -1,0 +1,161 @@
+{
+  "users": [
+    {
+      "userId": 1001,
+      "firstName": "John",
+      "lastName": "Smith",
+      "emailAddress": "john.smith@example.com",
+      "phoneNumber": "+1-555-0100",
+      "streetAddress": "123 Main Street",
+      "cityName": "Springfield",
+      "stateName": "Illinois",
+      "postalCode": "62701",
+      "countryName": "United States",
+      "accountStatus": "active",
+      "premiumMember": true,
+      "memberSince": "2020-01-15",
+      "lastLoginDate": "2025-10-26",
+      "preferences": {
+        "emailNotifications": true,
+        "smsNotifications": false,
+        "newsletterSubscribed": true,
+        "languagePreference": "en-US",
+        "timezonePreference": "America/Chicago",
+        "themePreference": "dark"
+      },
+      "metadata": {
+        "createdAt": "2020-01-15T10:30:00Z",
+        "updatedAt": "2025-10-26T14:22:33Z",
+        "lastModifiedBy": "system",
+        "version": 1.0
+      }
+    },
+    {
+      "userId": 1002,
+      "firstName": "Jane",
+      "lastName": "Johnson",
+      "emailAddress": "jane.johnson@example.com",
+      "phoneNumber": "+1-555-0101",
+      "streetAddress": "456 Oak Avenue",
+      "cityName": "Springfield",
+      "stateName": "Illinois",
+      "postalCode": "62702",
+      "countryName": "United States",
+      "accountStatus": "active",
+      "premiumMember": true,
+      "memberSince": "2020-03-22",
+      "lastLoginDate": "2025-10-27",
+      "preferences": {
+        "emailNotifications": true,
+        "smsNotifications": true,
+        "newsletterSubscribed": true,
+        "languagePreference": "en-US",
+        "timezonePreference": "America/Chicago",
+        "themePreference": "light"
+      },
+      "metadata": {
+        "createdAt": "2020-03-22T09:15:00Z",
+        "updatedAt": "2025-10-27T08:45:12Z",
+        "lastModifiedBy": "system",
+        "version": 1.0
+      }
+    },
+    {
+      "userId": 1003,
+      "firstName": "Michael",
+      "lastName": "Williams",
+      "emailAddress": "michael.williams@example.com",
+      "phoneNumber": "+1-555-0102",
+      "streetAddress": "789 Pine Road",
+      "cityName": "Springfield",
+      "stateName": "Illinois",
+      "postalCode": "62703",
+      "countryName": "United States",
+      "accountStatus": "active",
+      "premiumMember": false,
+      "memberSince": "2021-06-10",
+      "lastLoginDate": "2025-10-25",
+      "preferences": {
+        "emailNotifications": true,
+        "smsNotifications": false,
+        "newsletterSubscribed": false,
+        "languagePreference": "en-US",
+        "timezonePreference": "America/Chicago",
+        "themePreference": "dark"
+      },
+      "metadata": {
+        "createdAt": "2021-06-10T11:20:00Z",
+        "updatedAt": "2025-10-25T16:33:44Z",
+        "lastModifiedBy": "system",
+        "version": 1.0
+      }
+    },
+    {
+      "userId": 1004,
+      "firstName": "Sarah",
+      "lastName": "Martinez",
+      "emailAddress": "sarah.martinez@example.com",
+      "phoneNumber": "+1-555-0103",
+      "streetAddress": "321 Elm Boulevard",
+      "cityName": "Springfield",
+      "stateName": "Illinois",
+      "postalCode": "62704",
+      "countryName": "United States",
+      "accountStatus": "active",
+      "premiumMember": true,
+      "memberSince": "2019-11-08",
+      "lastLoginDate": "2025-10-27",
+      "preferences": {
+        "emailNotifications": true,
+        "smsNotifications": true,
+        "newsletterSubscribed": true,
+        "languagePreference": "en-US",
+        "timezonePreference": "America/Chicago",
+        "themePreference": "light"
+      },
+      "metadata": {
+        "createdAt": "2019-11-08T13:45:00Z",
+        "updatedAt": "2025-10-27T09:12:55Z",
+        "lastModifiedBy": "system",
+        "version": 1.0
+      }
+    },
+    {
+      "userId": 1005,
+      "firstName": "David",
+      "lastName": "Anderson",
+      "emailAddress": "david.anderson@example.com",
+      "phoneNumber": "+1-555-0104",
+      "streetAddress": "654 Maple Drive",
+      "cityName": "Springfield",
+      "stateName": "Illinois",
+      "postalCode": "62705",
+      "countryName": "United States",
+      "accountStatus": "active",
+      "premiumMember": false,
+      "memberSince": "2022-02-14",
+      "lastLoginDate": "2025-10-26",
+      "preferences": {
+        "emailNotifications": false,
+        "smsNotifications": false,
+        "newsletterSubscribed": false,
+        "languagePreference": "en-US",
+        "timezonePreference": "America/Chicago",
+        "themePreference": "dark"
+      },
+      "metadata": {
+        "createdAt": "2022-02-14T10:00:00Z",
+        "updatedAt": "2025-10-26T15:20:10Z",
+        "lastModifiedBy": "system",
+        "version": 1.0
+      }
+    }
+  ],
+  "statistics": {
+    "totalUsers": 5,
+    "activeUsers": 5,
+    "premiumUsers": 3,
+    "averageAccountAge": 3.5,
+    "lastUpdated": "2025-10-27T10:00:00Z"
+  }
+}

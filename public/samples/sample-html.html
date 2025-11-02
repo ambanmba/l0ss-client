@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sample product page for compression testing">
+    <meta name="keywords" content="product, ecommerce, shopping">
+    <title>Product Page - Sample HTML</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0px;
+            padding: 0px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0px auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #333333;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>E-Commerce Product Store</h1>
+        <p>Welcome to our online store</p>
+    </div>
+
+    <div class="container">
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="/images/product1.jpg" alt="Wireless Mouse - Ergonomic Design">
+                <h2>Wireless Mouse</h2>
+                <p class="description">High-quality wireless mouse with ergonomic design and long battery life</p>
+                <p class="price">$29.99</p>
+                <button type="submit" disabled="disabled">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="/images/product2.jpg" alt="Mechanical Keyboard - RGB Backlit">
+                <h2>Mechanical Keyboard</h2>
+                <p class="description">Premium mechanical keyboard with customizable RGB lighting and tactile switches</p>
+                <p class="price">$89.99</p>
+                <button type="submit" disabled="disabled">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="/images/product3.jpg" alt="USB-C Cable - Fast Charging">
+                <h2>USB-C Cable</h2>
+                <p class="description">Durable USB-C cable supporting fast charging and high-speed data transfer</p>
+                <p class="price">$12.99</p>
+                <button type="submit" disabled="disabled">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="/images/product4.jpg" alt="Monitor Stand - Adjustable Height">
+                <h2>Monitor Stand</h2>
+                <p class="description">Adjustable monitor stand with built-in storage compartment for accessories</p>
+                <p class="price">$49.99</p>
+                <button type="submit" disabled="disabled">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="/images/product5.jpg" alt="Desk Lamp - LED Lighting">
+                <h2>Desk Lamp</h2>
+                <p class="description">Modern LED desk lamp with adjustable brightness and color temperature settings</p>
+                <p class="price">$34.99</p>
+                <button type="submit" disabled="disabled">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="features">
+            <ul>
+                <li>Free shipping on orders over $50</li>
+                <li>30-day money-back guarantee</li>
+                <li>24/7 customer support available</li>
+                <li>Secure checkout with SSL encryption</li>
+                <li>Fast delivery within 2-5 business days</li>
+            </ul>
+        </div>
+
+        <div class="contact-form">
+            <h3>Contact Us</h3>
+            <form action="/submit" method="post">
+                <input type="text" name="name" placeholder="Your Name" required="required">
+                <input type="email" name="email" placeholder="Your Email" required="required">
+                <textarea name="message" rows="5" placeholder="Your Message"></textarea>
+                <button type="submit" disabled="disabled">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // Simple product interaction
+        console.log('Product page loaded');
+
+        function addToCart(productId) {
+            console.log('Adding product to cart: ' + productId);
+            alert('Product added to cart!');
+        }
+    </script>
+</body>
+</html>

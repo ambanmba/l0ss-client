@@ -77,7 +77,19 @@
           <h2>Drop files here or click to browse</h2>
           <p>Supports: JSON, CSV, JavaScript, HTML, CSS, SQL, XML, YAML, SVG, Markdown, Text</p>
           <input type="file" id="fileInput" multiple accept=".json,.csv,.js,.html,.css,.sql,.xml,.yaml,.yml,.svg,.md,.txt" style="display: none;">
-          <button class="btn btn-primary" id="browseBtn">Browse Files</button>
+          <div class="upload-buttons">
+            <button class="btn btn-primary" id="browseBtn">Browse Files</button>
+            <div class="sample-files-dropdown">
+              <button class="btn btn-secondary" id="sampleFilesBtn">Try Sample Files ▼</button>
+              <div class="sample-files-menu" id="sampleFilesMenu" style="display: none;">
+                <button class="sample-file-item" data-file="sample-json.json">📊 Sample JSON (User database)</button>
+                <button class="sample-file-item" data-file="sample-csv.csv">📈 Sample CSV (E-commerce data)</button>
+                <button class="sample-file-item" data-file="sample-javascript.js">📜 Sample JavaScript (Shopping cart)</button>
+                <button class="sample-file-item" data-file="sample-sql.sql">🗄️ Sample SQL (Database schema)</button>
+                <button class="sample-file-item" data-file="sample-html.html">🌐 Sample HTML (Product page)</button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
