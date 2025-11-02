@@ -1,13 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <defs>
-    <style>
-      .logo-text { font-family: 'Courier New', monospace; font-weight: 900; font-size: 60px; }
-      .logo-l, .logo-ss { fill: #ffffff; }
-      .logo-zero { fill: #ff8844; }
-    </style>
-  </defs>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@900&amp;display=swap');
+    text {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 900;
+      font-size: 90px;
+      fill: #ff8844;
+      font-variant-numeric: slashed-zero;
+    }
+  </style>
   <rect width="100" height="100" fill="#0a0a0a"/>
-  <text x="50" y="70" text-anchor="middle" class="logo-text">
-    <tspan class="logo-l">L</tspan><tspan class="logo-zero">0</tspan><tspan class="logo-ss">ss</tspan>
-  </text>
+  <text x="50" y="80" text-anchor="middle">0</text>
 </svg>
