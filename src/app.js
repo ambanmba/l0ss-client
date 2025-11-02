@@ -275,9 +275,228 @@ function selectLevel(level) {
   const levelNames = { minimal: 'Minimal', moderate: 'Moderate', aggressive: 'Aggressive' };
   selectedLevelName.textContent = levelNames[level];
   selectedLevelInfo.style.display = 'block';
+
+  // Show diff for this level
+  showDiffForLevel(level);
+}
+
+// Helper function to format operation types
+function formatOperationType(type, count) {
+  const friendlyNames = {
+    // JSON optimizations
+    'remove_nulls': 'Remove null values',
+    'remove_empty': 'Remove empty arrays and objects',
+    'trim_strings': 'Trim whitespace from strings',
+    'shorten_keys': 'Shorten object keys (frequency-based compression)',
+    'round_numbers': 'Round numbers to fewer decimals',
+    'deduplicate_arrays': 'Remove duplicate values from arrays',
+    'truncate_strings': 'Truncate long strings',
+    'flatten_nesting': 'Flatten deeply nested structures',
+    'round_to_integers': 'Round numbers to integers',
+
+    // CSV optimizations
+    'remove_empty_rows': 'Remove empty rows',
+    'trim_fields': 'Trim whitespace from fields',
+    'deduplicate_rows': 'Remove duplicate rows',
+    'remove_low_variance_columns': 'Remove columns with all same values',
+    'truncate_long_text': 'Truncate long text fields',
+    'delta_encoding': 'Delta encoding (store differences between consecutive values)',
+    'dictionary_encoding': 'Dictionary encoding (replace repeated strings with integer codes)',
+    'keep_first_n_columns': 'Keep only first N columns',
+    'sample_rows': 'Sample rows (keep every nth row)',
+    'remove_non_essential_columns': 'Remove non-essential columns',
+    'remove_outliers': 'Remove statistical outliers',
+    'statistical_sampling': 'Statistical sampling (keep 30%)',
+
+    // JavaScript optimizations
+    'remove_comments': 'Remove comments (single-line and multi-line)',
+    'remove_whitespace': 'Remove whitespace and minify',
+    'remove_console': 'Remove console.log statements',
+    'remove_debugger': 'Remove debugger statements',
+    'shorten_booleans': 'Shorten booleans (true → !0, false → !1)',
+    'shorten_undefined': 'Shorten undefined → void 0',
+    'shorten_infinity': 'Shorten Infinity → 1/0',
+    'optimize_numbers': 'Optimize number literals (1.0 → 1, 0.5 → .5)',
+
+    // HTML/CSS optimizations
+    'remove_html_comments': 'Remove HTML comments',
+    'remove_attribute_quotes': 'Remove quotes from attributes',
+    'remove_optional_tags': 'Remove optional closing tags',
+    'remove_type_attributes': 'Remove type attributes',
+    'remove_empty_attributes': 'Remove empty attributes',
+    'shorten_boolean_attributes': 'Shorten boolean attributes',
+    'shorten_doctype': 'Shorten DOCTYPE',
+    'shorten_colors': 'Shorten color codes (#ffffff → #fff)',
+    'shorten_zeros': 'Remove units from zero values (0px → 0)',
+    'merge_duplicate_rules': 'Merge duplicate selectors',
+    'remove_vendor_prefixes': 'Remove vendor prefixes',
+
+    // SQL optimizations
+    'lowercase_keywords': 'Convert keywords to lowercase',
+    'remove_explain': 'Remove EXPLAIN statements',
+    'shorten_aliases': 'Shorten table/column aliases',
+    'remove_optional_keywords': 'Remove optional keywords (OUTER, PUBLIC, CASCADE)',
+    'combine_insert_statements': 'Combine multiple INSERT statements',
+    'remove_schema_changes': 'Remove schema changes (CREATE, DROP, ALTER)',
+    'keep_data_statements_only': 'Keep only data statements',
+    'remove_transactions': 'Remove transaction statements',
+    'remove_constraints': 'Remove constraints',
+    'sample_insert_rows': 'Sample INSERT statement rows',
+
+    // SVG/XML/YAML optimizations
+    'remove_metadata': 'Remove metadata elements',
+    'remove_hidden_elements': 'Remove hidden elements',
+    'shorten_ids': 'Shorten IDs and class names',
+    'optimize_paths': 'Optimize SVG path data',
+    'remove_default_attrs': 'Remove attributes with default values',
+    'remove_declaration': 'Remove XML declaration',
+    'remove_doctype': 'Remove DOCTYPE declaration',
+    'remove_cdata': 'Remove CDATA sections',
+    'remove_empty_elements': 'Remove empty XML elements',
+    'shorten_tag_names': 'Shorten tag names',
+    'remove_document_markers': 'Remove document markers (--- and ...)',
+    'inline_short_strings': 'Inline short multi-line strings',
+    'remove_unnecessary_quotes': 'Remove unnecessary quotes',
+    'shorten_null_values': 'Shorten null values (null → ~)',
+    'convert_to_flow_style': 'Convert arrays to flow style'
+  };
+
+  const friendlyName = friendlyNames[type] || type.replace(/_/g, ' ');
+
+  // Add count if meaningful
+  if (count && count > 1 && !type.includes('minify') && !type.includes('whitespace')) {
+    return `${friendlyName} (${count} instance${count === 1 ? '' : 's'})`;
+  }
+
+  return friendlyName;
+}
+
+// Show diff preview for selected level
+function showDiffForLevel(level) {
+  if (!previewData || !currentFileContent) return;
+
+  const levelNames = { minimal: 'Minimal', moderate: 'Moderate', aggressive: 'Aggressive' };
+  document.getElementById('diffLevelName').textContent = levelNames[level];
+
+  const diffContent = document.getElementById('diffContent');
+  diffContent.innerHTML = '';
+
+  // Get compressed content for this level
+  const original = currentFileContent;
+  const compressed = previewData.results[level].compressed;
+  const operations = previewData.results[level].operations || [];
+
+  // Optimizations section
+  const optimizationsSection = document.createElement('div');
+  optimizationsSection.style.cssText = 'margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border);';
+
+  const optimizationsLabel = document.createElement('div');
+  optimizationsLabel.className = 'diff-label';
+  optimizationsLabel.textContent = 'Optimizations Applied:';
+  optimizationsLabel.style.marginBottom = '0.5rem';
+  optimizationsSection.appendChild(optimizationsLabel);
+
+  const optimizationsList = document.createElement('ul');
+  optimizationsList.style.cssText = 'margin: 0; padding-left: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);';
+
+  if (operations.length === 0) {
+    const li = document.createElement('li');
+    li.textContent = 'Whitespace removal and minification';
+    optimizationsList.appendChild(li);
+  } else {
+    operations.forEach(op => {
+      const li = document.createElement('li');
+      li.style.marginBottom = '0.25rem';
+      li.textContent = formatOperationType(op.type, op.count);
+      optimizationsList.appendChild(li);
+    });
+  }
+
+  optimizationsSection.appendChild(optimizationsList);
+  diffContent.appendChild(optimizationsSection);
+
+  // Create before section
+  const beforeSection = document.createElement('div');
+  beforeSection.className = 'diff-section';
+
+  const beforeLabel = document.createElement('div');
+  beforeLabel.className = 'diff-label';
+  beforeLabel.textContent = 'Before:';
+  beforeSection.appendChild(beforeLabel);
+
+  const beforeContent = document.createElement('pre');
+  beforeContent.className = 'diff-before';
+
+  // Show first 500 characters or 10 lines
+  const originalLines = original.split('\n');
+  const compressedLines = compressed.split('\n');
+  const isMinified = compressedLines.length === 1 && originalLines.length > 1;
+
+  if (isMinified) {
+    beforeContent.textContent = originalLines.slice(0, 10).join('\n');
+    if (originalLines.length > 10) {
+      beforeContent.textContent += '\n... (' + (originalLines.length - 10) + ' more lines)';
+    }
+  } else {
+    beforeContent.textContent = original.substring(0, 500);
+    if (original.length > 500) {
+      beforeContent.textContent += '\n... (' + (original.length - 500) + ' more characters)';
+    }
+  }
+  beforeSection.appendChild(beforeContent);
+
+  // Create after section
+  const afterSection = document.createElement('div');
+  afterSection.className = 'diff-section';
+
+  const afterLabel = document.createElement('div');
+  afterLabel.className = 'diff-label';
+  afterLabel.textContent = 'After:';
+  afterSection.appendChild(afterLabel);
+
+  const afterContent = document.createElement('pre');
+  afterContent.className = 'diff-after';
+
+  if (isMinified) {
+    afterContent.textContent = compressed.substring(0, 500);
+    if (compressed.length > 500) {
+      afterContent.textContent += '\n... (' + (compressed.length - 500) + ' more characters)';
+    }
+  } else {
+    afterContent.textContent = compressedLines.slice(0, 10).join('\n');
+    if (compressedLines.length > 10) {
+      afterContent.textContent += '\n... (' + (compressedLines.length - 10) + ' more lines)';
+    }
+  }
+  afterSection.appendChild(afterContent);
+
+  diffContent.appendChild(beforeSection);
+  diffContent.appendChild(afterSection);
+
+  document.getElementById('diffPreview').style.display = 'block';
 }
 
 // Configuration UI
+let isConfigVisible = true;
+
+// Config toggle handler
+document.getElementById('configToggle')?.addEventListener('click', () => {
+  isConfigVisible = !isConfigVisible;
+  const configContent = document.getElementById('configContent');
+  const configHint = document.querySelector('.config-hint');
+  const toggleBtn = document.getElementById('configToggle');
+
+  if (isConfigVisible) {
+    configContent.style.display = 'grid';
+    if (configHint) configHint.style.display = 'block';
+    toggleBtn.textContent = 'Hide Options';
+  } else {
+    configContent.style.display = 'none';
+    if (configHint) configHint.style.display = 'none';
+    toggleBtn.textContent = 'Show Options';
+  }
+});
+
 function renderConfigUI(options) {
   configContent.innerHTML = '';
 

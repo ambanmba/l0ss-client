@@ -38,6 +38,14 @@
 
     <!-- Main Container -->
     <main class="container">
+      <!-- Warning Banner -->
+      <div class="warning-banner">
+        <div class="warning-icon">⚠️</div>
+        <div class="warning-content">
+          <strong>Important:</strong> Lossy compression permanently removes data to reduce file size. Always thoroughly test compressed files in your development and staging environments before using in production to ensure functionality remains intact.
+        </div>
+      </div>
+
       <!-- Upload Section -->
       <section class="upload-section">
         <div class="upload-area" id="uploadArea">
@@ -83,10 +91,22 @@
           💡 Click a level above to select it and see detailed optimizations
         </div>
 
+        <!-- Diff Preview Section -->
+        <div id="diffPreview" style="margin-top: 1.5rem; display: none;">
+          <h3 style="margin-bottom: 0.5rem;">Changes with <span id="diffLevelName" style="color: var(--success);">Moderate</span>:</h3>
+          <div id="diffContent"></div>
+        </div>
+
         <!-- Configuration Panel -->
         <div class="config-panel" id="configPanel" style="display: none;">
-          <h3>⚙️ Advanced Options</h3>
+          <div class="config-header">
+            <h3>⚙️ Advanced Options</h3>
+            <button class="config-toggle" id="configToggle">Hide Options</button>
+          </div>
           <div class="config-content" id="configContent"></div>
+          <div class="config-hint">
+            💡 Changes will automatically update the preview. Adjust options to see their impact on compression.
+          </div>
         </div>
       </section>
 
