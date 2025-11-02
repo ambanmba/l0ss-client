@@ -55,27 +55,46 @@
         <div id="filesList"></div>
       </section>
 
+      <!-- Preview Section -->
+      <section class="preview-section" id="previewSection" style="display: none;">
+        <h2>Compression Preview</h2>
+        <div class="comparison-grid" id="comparisonGrid">
+          <div class="comparison-card" data-level="minimal">
+            <h3>Minimal</h3>
+            <div class="stat-value" id="previewMinimal">-</div>
+            <div class="stat-label" id="previewMinimalReduction">-</div>
+            <div class="level-description">Safe optimizations only</div>
+          </div>
+          <div class="comparison-card" data-level="moderate">
+            <h3>Moderate</h3>
+            <div class="stat-value" id="previewModerate">-</div>
+            <div class="stat-label" id="previewModerateReduction">-</div>
+            <div class="level-description">Balanced approach</div>
+          </div>
+          <div class="comparison-card" data-level="aggressive">
+            <h3>Aggressive</h3>
+            <div class="stat-value" id="previewAggressive">-</div>
+            <div class="stat-label" id="previewAggressiveReduction">-</div>
+            <div class="level-description">Maximum compression</div>
+          </div>
+        </div>
+
+        <div class="preview-hint">
+          💡 Click a level above to select it and see detailed optimizations
+        </div>
+
+        <!-- Configuration Panel -->
+        <div class="config-panel" id="configPanel" style="display: none;">
+          <h3>⚙️ Advanced Options</h3>
+          <div class="config-content" id="configContent"></div>
+        </div>
+      </section>
+
       <!-- Compression Settings -->
       <section class="settings-section" id="settingsSection" style="display: none;">
-        <h2>Compression Settings</h2>
-        <div class="settings-grid">
-          <div class="setting-group">
-            <label>Compression Level</label>
-            <div class="level-buttons">
-              <button class="level-btn" data-level="minimal">
-                <strong>Minimal</strong>
-                <span>10-30% reduction</span>
-              </button>
-              <button class="level-btn active" data-level="moderate">
-                <strong>Moderate</strong>
-                <span>30-60% reduction</span>
-                <small>Recommended</small>
-              </button>
-              <button class="level-btn" data-level="aggressive">
-                <strong>Aggressive</strong>
-                <span>60-90% reduction</span>
-              </button>
-            </div>
+        <div class="selected-level-info" id="selectedLevelInfo" style="display: none;">
+          <div class="selected-level-badge">
+            Selected: <strong id="selectedLevelName">Moderate</strong>
           </div>
         </div>
         <button class="btn btn-success btn-large" id="compressBtn">

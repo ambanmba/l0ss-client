@@ -1,6 +1,6 @@
 /**
  * L0ss Client - Main Application
- * 100% client-side lossy compression
+ * 100% client-side lossy compression with preview and advanced options
  */
 
 import { compressJSON } from './compression/json.js';
@@ -13,10 +13,17 @@ import { compressXML, compressYAML } from './compression/xml-yaml.js';
 import { compressText } from './compression/text.js';
 import { detectFileType } from './utils/file-type-detector.js';
 import { downloadFile, downloadZip } from './utils/file-handler.js';
+import { getOptionsForFileType, formatOptionName } from './utils/compression-options.js';
+import { analyzeFile } from './utils/preview.js';
 
 // State
 let selectedFiles = [];
+let currentFileIndex = 0;
+let currentFileContent = '';
+let currentFileType = '';
 let compressionLevel = 'moderate';
+let customOptions = {};
+let previewData = null;
 let compressionResults = [];
 
 // DOM Elements
@@ -26,7 +33,12 @@ const browseBtn = document.getElementById('browseBtn');
 const filesSection = document.getElementById('filesSection');
 const filesList = document.getElementById('filesList');
 const fileCount = document.getElementById('fileCount');
+const previewSection = document.getElementById('previewSection');
+const configPanel = document.getElementById('configPanel');
+const configContent = document.getElementById('configContent');
 const settingsSection = document.getElementById('settingsSection');
+const selectedLevelInfo = document.getElementById('selectedLevelInfo');
+const selectedLevelName = document.getElementById('selectedLevelName');
 const compressBtn = document.getElementById('compressBtn');
 const resultsSection = document.getElementById('resultsSection');
 const resultsList = document.getElementById('resultsList');
@@ -60,12 +72,14 @@ compressBtn.addEventListener('click', compressFiles);
 downloadAllBtn.addEventListener('click', downloadAllFiles);
 resetBtn.addEventListener('click', reset);
 
-// Level selection buttons
-document.querySelectorAll('.level-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
-    e.currentTarget.classList.add('active');
-    compressionLevel = e.currentTarget.dataset.level;
+// Comparison card click handlers
+document.querySelectorAll('.comparison-card').forEach(card => {
+  card.addEventListener('click', () => {
+    if (card.classList.contains('ineffective')) {
+      return;
+    }
+    const level = card.getAttribute('data-level');
+    selectLevel(level);
   });
 });
 
@@ -105,11 +119,15 @@ function handleDrop(e) {
   addFiles(files);
 }
 
-function addFiles(files) {
+async function addFiles(files) {
   selectedFiles = [...selectedFiles, ...files];
   updateFilesList();
   showSection(filesSection);
-  showSection(settingsSection);
+
+  // Auto-analyze first file
+  if (files.length > 0) {
+    await analyzeFirstFile();
+  }
 }
 
 function updateFilesList() {
@@ -133,9 +151,251 @@ window.removeFile = function(index) {
   updateFilesList();
   if (selectedFiles.length === 0) {
     hideSection(filesSection);
+    hideSection(previewSection);
     hideSection(settingsSection);
+  } else if (index === currentFileIndex) {
+    // Re-analyze first file
+    analyzeFirstFile();
   }
 };
+
+// File Analysis & Preview
+async function analyzeFirstFile() {
+  if (selectedFiles.length === 0) return;
+
+  const file = selectedFiles[0];
+  currentFileIndex = 0;
+  currentFileType = detectFileType(file.name);
+
+  showLoading('Analyzing file...');
+
+  try {
+    currentFileContent = await file.text();
+
+    // Get available options for this file type
+    const options = getOptionsForFileType(currentFileType);
+
+    // Reset custom options
+    customOptions = {};
+
+    // Analyze file
+    previewData = await analyzeFile(currentFileContent, currentFileType, customOptions);
+
+    // Display preview
+    displayPreview();
+
+    // Render configuration UI if options available
+    if (Object.keys(options).length > 0) {
+      renderConfigUI(options);
+    } else {
+      configPanel.style.display = 'none';
+    }
+
+    showSection(previewSection);
+    showSection(settingsSection);
+
+  } catch (error) {
+    console.error('Error analyzing file:', error);
+    alert(`Error analyzing file: ${error.message}`);
+  } finally {
+    hideLoading();
+  }
+}
+
+// Display Preview
+function displayPreview() {
+  if (!previewData) return;
+
+  const { results, recommendation } = previewData;
+
+  // Update preview cards
+  document.getElementById('previewMinimal').textContent = results.minimal.sizeFormatted;
+  document.getElementById('previewMinimalReduction').textContent =
+    `${results.minimal.reduction.toFixed(1)}% reduction`;
+
+  document.getElementById('previewModerate').textContent = results.moderate.sizeFormatted;
+  document.getElementById('previewModerateReduction').textContent =
+    `${results.moderate.reduction.toFixed(1)}% reduction`;
+
+  document.getElementById('previewAggressive').textContent = results.aggressive.sizeFormatted;
+  document.getElementById('previewAggressiveReduction').textContent =
+    `${results.aggressive.reduction.toFixed(1)}% reduction`;
+
+  // Handle ineffective levels (grey out)
+  const cards = document.querySelectorAll('.comparison-card');
+  const effectiveLevels = recommendation.effectiveLevels;
+
+  cards.forEach((card, index) => {
+    const level = ['minimal', 'moderate', 'aggressive'][index];
+    const isEffective = effectiveLevels[level];
+
+    card.classList.remove('recommended', 'ineffective', 'selected');
+
+    // Remove badges
+    const existingBadges = card.querySelectorAll('.recommended-badge, .no-improvement-badge');
+    existingBadges.forEach(badge => badge.remove());
+
+    if (!isEffective) {
+      card.classList.add('ineffective');
+      const badge = document.createElement('div');
+      badge.className = 'no-improvement-badge';
+      badge.textContent = 'No improvement';
+      card.appendChild(badge);
+    }
+  });
+
+  // Highlight recommended level
+  const recommendedLevel = recommendation.level;
+  const recommendedCard = document.querySelector(`.comparison-card[data-level="${recommendedLevel}"]`);
+  if (recommendedCard && effectiveLevels[recommendedLevel]) {
+    recommendedCard.classList.add('recommended');
+    const badge = document.createElement('div');
+    badge.className = 'recommended-badge';
+    badge.textContent = 'Recommended';
+    recommendedCard.appendChild(badge);
+  }
+
+  // Auto-select recommended level
+  selectLevel(recommendedLevel);
+}
+
+// Select Compression Level
+function selectLevel(level) {
+  compressionLevel = level;
+
+  // Update card selection
+  document.querySelectorAll('.comparison-card').forEach(card => {
+    card.classList.remove('selected');
+    if (card.getAttribute('data-level') === level) {
+      card.classList.add('selected');
+    }
+  });
+
+  // Update selected level info
+  const levelNames = { minimal: 'Minimal', moderate: 'Moderate', aggressive: 'Aggressive' };
+  selectedLevelName.textContent = levelNames[level];
+  selectedLevelInfo.style.display = 'block';
+}
+
+// Configuration UI
+function renderConfigUI(options) {
+  configContent.innerHTML = '';
+
+  if (!options || Object.keys(options).length === 0) {
+    configPanel.style.display = 'none';
+    return;
+  }
+
+  const optionEntries = Object.entries(options);
+
+  optionEntries.forEach(([key, option]) => {
+    const optionDiv = document.createElement('div');
+    optionDiv.className = 'config-option';
+
+    // Header with name and impact badge
+    const header = document.createElement('div');
+    header.className = 'config-option-header';
+
+    const name = document.createElement('div');
+    name.className = 'config-option-name';
+    name.textContent = formatOptionName(key);
+
+    const impact = document.createElement('div');
+    impact.className = `config-option-impact ${option.impact}`;
+    impact.textContent = option.impact;
+
+    header.appendChild(name);
+    header.appendChild(impact);
+    optionDiv.appendChild(header);
+
+    // Description
+    const desc = document.createElement('div');
+    desc.className = 'config-option-desc';
+    desc.textContent = option.description;
+    optionDiv.appendChild(desc);
+
+    // Control
+    const control = document.createElement('div');
+    control.className = 'config-option-control';
+
+    // Determine input type based on default value
+    if (typeof option.default === 'boolean') {
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = option.default;
+      checkbox.id = `opt-${key}`;
+      checkbox.addEventListener('change', () => {
+        customOptions[key] = checkbox.checked;
+        refreshPreview();
+      });
+
+      const label = document.createElement('label');
+      label.htmlFor = `opt-${key}`;
+      label.textContent = 'Enable';
+
+      control.appendChild(checkbox);
+      control.appendChild(label);
+    } else if (typeof option.default === 'number') {
+      const label = document.createElement('label');
+      label.textContent = 'Value:';
+      label.style.marginRight = '0.5rem';
+
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.value = option.default;
+      input.id = `opt-${key}`;
+      input.addEventListener('input', () => {
+        customOptions[key] = parseFloat(input.value) || option.default;
+        refreshPreview();
+      });
+
+      control.appendChild(label);
+      control.appendChild(input);
+    } else if (Array.isArray(option.default)) {
+      const label = document.createElement('label');
+      label.textContent = 'Value (comma-separated):';
+      label.style.marginRight = '0.5rem';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = option.default.join(', ');
+      input.id = `opt-${key}`;
+      input.addEventListener('input', () => {
+        customOptions[key] = input.value.split(',').map(v => v.trim());
+        refreshPreview();
+      });
+
+      control.appendChild(label);
+      control.appendChild(input);
+    }
+
+    optionDiv.appendChild(control);
+    configContent.appendChild(optionDiv);
+
+    // Initialize customOptions with default
+    if (customOptions[key] === undefined) {
+      customOptions[key] = option.default;
+    }
+  });
+
+  configPanel.style.display = 'block';
+}
+
+// Refresh preview with custom options
+async function refreshPreview() {
+  if (!currentFileContent || !currentFileType) return;
+
+  showLoading('Updating preview...');
+
+  try {
+    previewData = await analyzeFile(currentFileContent, currentFileType, customOptions);
+    displayPreview();
+  } catch (error) {
+    console.error('Error refreshing preview:', error);
+  } finally {
+    hideLoading();
+  }
+}
 
 // Compression
 async function compressFiles() {
@@ -155,14 +415,26 @@ async function compressFiles() {
         throw new Error(`Unsupported file type: ${fileType}`);
       }
 
-      const result = await compressFunc(content, compressionLevel);
+      const result = await compressFunc(content, compressionLevel, customOptions);
 
       compressionResults.push({
         originalName: file.name,
         originalSize: file.size,
         compressedContent: result.compressed,
         compressedSize: new Blob([result.compressed]).size,
-        manifest: result.manifest,
+        manifest: {
+          version: '1.0.0',
+          original_file: file.name,
+          compression_level: compressionLevel,
+          timestamp: new Date().toISOString(),
+          original_size: file.size,
+          compressed_size: new Blob([result.compressed]).size,
+          reduction_percent: ((file.size - new Blob([result.compressed]).size) / file.size * 100).toFixed(2),
+          operations: result.operations || [],
+          custom_options: customOptions,
+          reversibility: 'partial',
+          data_loss: compressionLevel === 'aggressive' ? 'high' : compressionLevel === 'moderate' ? 'medium' : 'low'
+        },
         fileType
       });
     } catch (error) {
@@ -180,6 +452,7 @@ async function compressFiles() {
 }
 
 function showResults() {
+  hideSection(previewSection);
   hideSection(settingsSection);
   showSection(resultsSection);
 
@@ -246,8 +519,13 @@ async function downloadAllFiles() {
 function reset() {
   selectedFiles = [];
   compressionResults = [];
+  currentFileContent = '';
+  currentFileType = '';
+  previewData = null;
+  customOptions = {};
   fileInput.value = '';
   hideSection(filesSection);
+  hideSection(previewSection);
   hideSection(settingsSection);
   hideSection(resultsSection);
   updateFilesList();
